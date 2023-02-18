@@ -4,7 +4,7 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    DOCKERHUB_CREDENTIALS = credentials('okoriko1')
   }
   stages {
     stage('Build') {
@@ -28,8 +28,4 @@ pipeline {
       sh 'docker logout'
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 77132ef3fd12abaf112ad0eb8e23fc773bff645a
