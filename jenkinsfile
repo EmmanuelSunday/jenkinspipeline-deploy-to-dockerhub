@@ -1,0 +1,15 @@
+node {   
+    stage('Clone repository') {
+        git credentialsId: 'git', url: 'https://github.com/EmmanuelSunday/jenkinspipeline-deploy-to-dockerhub.git'
+    }
+    
+    stage('Build image') {
+       dockerImage = docker.build("okoriko1/apache_webapp_image:latest")
+    }
+    
+ stage('Push image') {
+        withDockerRegistry([ credentialsId: "dockerhubaccount", url: "" ]) {
+        dockerImage.push()
+        }
+    }    
+}
