@@ -1,15 +1,31 @@
-node {   
-    stage('Clone repository') {
-        git credentialsId: 'git', url: 'https://github.com/EmmanuelSunday/jenkinspipeline-deploy-to-dockerhub.git'
+pipeline {
+  agent any
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t okoriko1/apache_webapp_image .'
+      }
     }
-    
-    stage('Build image') {
-       dockerImage = docker.build("okoriko1/apache_webapp_image:latest")
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
     }
-    
- stage('Push image') {
-        withDockerRegistry([ credentialsId: "dockerhubaccount", url: "" ]) {
-        dockerImage.push()
-        }
-    }    
+    stage('Push') {
+      steps {
+        sh 'docker push okoriko1/apache_webapp_image'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
 }
