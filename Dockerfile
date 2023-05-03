@@ -1,4 +1,5 @@
 FROM centos:centos7
+LABEL maintainer="Sunday"
 
 RUN yum -y update
 RUN yum -y install httpd
