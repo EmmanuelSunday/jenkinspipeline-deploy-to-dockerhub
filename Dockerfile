@@ -6,6 +6,6 @@ RUN yum -y install httpd
 
 COPY index.html /var/www/html/
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
